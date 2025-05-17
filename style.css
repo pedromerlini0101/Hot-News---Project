@@ -75,7 +75,7 @@ main {
   transition: 0.2s ease-in-out;
 }
 
-#options button:hover {
+#options button.filter-selected {
   background-color: #e63946;
   color: white;
   border-color: #e63946;
