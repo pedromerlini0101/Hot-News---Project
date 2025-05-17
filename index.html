@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hot News</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script src="https://kit.fontawesome.com/1073bdefd9.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <header x-data="{menuOpen: false}">
+    <i x-on:click="menuOpen=true" class="fas fa-bars"></i>
+    <h3>Hot News</h3>
+    <i class="fas fa-search"></i>
+    
+    <div x-show="menuOpen" x-on:click.away="menuOpen = false" class="menu">
+      <ul>
+        <li><a>Item 1</a></li>
+        <li><a>Item 2</a></li>
+        <li><a>Item 3</a></li>
+      </ul>
+    </div>
+  </header>
+  
+  <div x-data="{open: false}" style="padding: 15px; color: #e53935">
+    <i x-on:click="open = !open" class="fa-solid fa-sliders"></i>
+    <div x-show="open" class="filter-options">
+      <div id="idiomas">
+        <h5>idiomas</h5>
+        <div id="options">
+          <button value="pt">Português</button>
+          <button value="en">English</button>
+          <button value="es">Español</button>
+          <button value="ar">العربية</button>
+          <button value="zh">中文</button>
+          <button value="nl">Nederlands</button>
+          <button value="fr">Français</button>
+          <button value="de">Deutsch</button>
+          <button value="el">Ελληνικά</button>
+          <button value="he">עברית</button>
+          <button value="hi">हिन्दी</button>
+          <button value="it">Italiano</button>
+          <button value="ja">日本語</button>
+          <button value="ml">മലയാളം</button>
+          <button value="mr">मराठी</button>
+          <button value="no">Norsk</button>
+          <button value="ro">Română</button>
+          <button value="ru">Русский</button>
+          <button value="sv">Svenska</button>
+          <button value="ta">தமிழ்</button>
+          <button value="te">తెలుగు</button>
+          <button value="uk">Українська</button>
+        </div>
+      </div>
+      <br>
+      <div id="países">
+        <h5>países</h5>
+        <div id="options">
+          <button value="ar">Argentina</button>
+          <button value="au">Australia</button>
+          <button value="at">Österreich</button>
+          <button value="be">België / Belgique</button>
+          <button value="br">Brasil</button>
+          <button value="bg">България</button>
+          <button value="ca">Canada</button>
+          <button value="cn">中国</button>
+          <button value="co">Colombia</button>
+          <button value="cu">Cuba</button>
+          <button value="cz">Česká republika</button>
+          <button value="eg">مصر</button>
+          <button value="fr">France</button>
+          <button value="de">Deutschland</button>
+          <button value="gr">Ελλάδα</button>
+          <button value="hk">香港</button>
+          <button value="hu">Magyarország</button>
+          <button value="in">भारत</button>
+          <button value="id">Indonesia</button>
+          <button value="ie">Ireland</button>
+          <button value="il">ישראל</button>
+          <button value="it">Italia</button>
+          <button value="jp">日本</button>
+          <button value="lv">Latvija</button>
+          <button value="lt">Lietuva</button>
+          <button value="my">Malaysia</button>
+          <button value="mx">México</button>
+          <button value="ma">المغرب</button>
+          <button value="pt">Portugal</button>
+          <button value="nl">Nederland</button>
+          <button value="nz">New Zealand</button>
+          <button value="ng">Nigeria</button>
+          <button value="no">Norge</button>
+          <button value="ph">Pilipinas</button>
+          <button value="pl">Polska</button>
+          <button value="ro">România</button>
+          <button value="ru">Россия</button>
+          <button value="sa">السعودية</button>
+          <button value="rs">Србија</button>
+          <button value="sg">Singapore</button>
+          <button value="sk">Slovensko</button>
+          <button value="si">Slovenija</button>
+          <button value="za">South Africa</button>
+          <button value="kr">대한민국</button>
+          <button value="se">Sverige</button>
+          <button value="ch">Schweiz / Suisse / Svizzera</button>
+          <button value="tw">台灣</button>
+          <button value="th">ประเทศไทย</button>
+          <button value="tr">Türkiye</button>
+          <button value="ua">Україна</button>
+          <button value="ae">الإمارات</button>
+          <button value="gb">United Kingdom</button>
+          <button value="us">United States</button>
+          <button value="ve">Venezuela</button>
+          <button value="vn">Việt Nam</button>
+        </div>
+      </div>
+      <br>
+      <div id="tópicos">
+        <h5>tópicos</h5>
+        <div id="options">
+          <button value="breaking-news">Últimas notícias</button>
+          <button value="world">Mundo</button>
+          <button value="nation">Nacional</button>
+          <button value="business">Negócios</button>
+          <button value="technology">Tecnologia</button>
+          <button value="entertainment">Entretenimento</button>
+          <button value="sports">Esportes</button>
+          <button value="science">Ciência</button>
+          <button value="health">Saúde</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <main x-data="{list: [1,2,3]}">
+    <template x-for="i in list" :key="i">
+    <div class="noticia">
+      <header class="titulo">
+        <h2>Título</h2>
+      </header>
+      <div>
+        <img src="https://placehold.co/400x200">
+      </div>
+      <footer class="data-de-publicacao">
+        <p style="color: #757575">publicado em 16/05/2025</p>
+      </footer>
+    </div>
+    </template>
+  </main>
+  <script src="main.js" type="module"></script>
+</body>
+</html>
