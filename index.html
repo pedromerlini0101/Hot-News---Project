@@ -12,17 +12,20 @@
 </head>
 
 <body>
-  <header x-data="{menuOpen: false}">
-    <i x-on:click="menuOpen=true" class="fas fa-bars"></i>
-    <h3>Hot News</h3>
-    <i class="fas fa-search"></i>
+  <header x-data="{menuOpen: false, onsearch: false}">
+    <i @click="menuOpen=true" class="fas fa-bars"></i>
+    <h1>Hot News</h1>
+    <i @click="onsearch=true" class="fas fa-search"></i>
     
-    <div x-show="menuOpen" x-on:click.away="menuOpen = false" class="menu">
+    <div x-show="menuOpen" @click.away="menuOpen = false" class="menu">
       <ul>
         <li><a>Item 1</a></li>
         <li><a>Item 2</a></li>
         <li><a>Item 3</a></li>
       </ul>
+    </div>
+    <div x-show="onsearch" @click.away="onsearch = false" class="search-input">
+      <input style="width: 75%; height: 50%; padding-left: 2px" type="search" placeholder="pesquisar palavra-chave...">
     </div>
   </header>
   
@@ -31,108 +34,32 @@
     <div x-show="open" class="filter-options">
       <div id="idiomas">
         <h5>idiomas</h5>
-        <div x-data="{selectedValue: ''}" id="options">
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="pt">Português</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="en">English</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="es">Español</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ar">العربية</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="zh">中文</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="nl">Nederlands</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="fr">Français</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="de">Deutsch</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="el">Ελληνικά</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="he">עברית</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value"  value="hi">हिन्दी</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="it">Italiano</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ja">日本語</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ml">മലയാളം</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="mr">मराठी</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="no">Norsk</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ro">Română</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ru">Русский</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="sv">Svenska</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ta">தமிழ்</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="te">తెలుగు</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="uk">Українська</button>
+        <div x-data="{idiomas: getIdiomas(), selectedValue: null}" id="options">
+          <template x-for="idioma in idiomas" :key="idioma.value">
+            <button :class="{'filter-selected': selectedValue == $el.value }" @click="selectedValue=selectedValue==$el.value?'':$el.value" :value="idioma.value" x-text="idioma.label"></button>
+          </template>
         </div>
       </div>
       <br>
       <div id="países">
         <h5>países</h5>
-        <div x-data="{selectedValue: ''}" id="options">
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ar">Argentina</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="au">Australia</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="at">Österreich</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="be">België / Belgique</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="br">Brasil</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="bg">България</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ca">Canada</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="cn">中国</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="co">Colombia</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="cu">Cuba</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="cz">Česká republika</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="eg">مصر</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="fr">France</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="de">Deutschland</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="gr">Ελλάδα</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="hk">香港</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="hu">Magyarország</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="in">भारत</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="id">Indonesia</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ie">Ireland</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="il">ישראל</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="it">Italia</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="jp">日本</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="lv">Latvija</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="lt">Lietuva</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="my">Malaysia</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="mx">México</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ma">المغرب</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="pt">Portugal</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="nl">Nederland</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="nz">New Zealand</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ng">Nigeria</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="no">Norge</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ph">Pilipinas</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="pl">Polska</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ro">România</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ru">Россия</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="sa">السعودية</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="rs">Србија</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="sg">Singapore</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="sk">Slovensko</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="si">Slovenija</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="za">South Africa</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="kr">대한민국</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="se">Sverige</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ch">Schweiz / Suisse / Svizzera</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="tw">台灣</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="th">ประเทศไทย</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="tr">Türkiye</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ua">Україна</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ae">الإمارات</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="gb">United Kingdom</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="us">United States</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="ve">Venezuela</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="vn">Việt Nam</button>
+        <div x-data="{paises: getPaises(), selectedValue: null}" id="options">
+          <template x-for="pais in paises" :key="pais.value">
+            <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue=selectedValue==$el.value?'':$el.value" :value="pais.value" x-text="pais.label"></button>
+          </template>
         </div>
       </div>
       <br>
       <div id="tópicos">
         <h5>Tópicos</h5>
-        <div x-data="{ selectedValue: '' }" id="options">
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="breaking-news">Últimas notícias</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="world">Mundo</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="nation">Nacional</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="business">Negócios</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="technology">Tecnologia</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="entertainment">Entretenimento</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="sports">Esportes</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="science">Ciência</button>
-          <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue = $el.value" value="health">Saúde</button>
+        <div x-data="{topicos: getTopicos(), selectedValue:null}" id="options">
+          <template x-for="topico in topicos" :key="topico.value">
+            <button :class="{'filter-selected': selectedValue == $el.value }" @click="selectedValue=selectedValue==$el.value?'':$el.value" :value="topico.value" x-text="topico.label"></button>
+          </template>
         </div>
       </div>
     </div>
+    <!--h5 style="margin-top: 10px; cursor: pointer; text-decoration: underline;">adicionar filtros</h5-->
   </div>
   
   <main x-data="{list: [1,2,3]}">
@@ -150,6 +77,6 @@
     </div>
     </template>
   </main>
-  <script src="main.js" type="module"></script>
+  <script src="utils.js"></script>
 </body>
 </html>
