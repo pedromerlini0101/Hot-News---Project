@@ -11,7 +11,7 @@
   <script src="https://kit.fontawesome.com/1073bdefd9.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body x-data="{articles: [], selectedIdioma: null, selectedPais: null, selectedTopico: null}">
   <header x-data="{menuOpen: false, onsearch: false}">
     <i @click="menuOpen=true" class="fas fa-bars"></i>
     <h1>Hot News</h1>
@@ -19,57 +19,61 @@
     
     <div x-show="menuOpen" @click.away="menuOpen = false" class="menu">
       <ul>
-        <li><a>Item 1</a></li>
-        <li><a>Item 2</a></li>
-        <li><a>Item 3</a></li>
+        <li><a href="#">Salvos</a></li>
+        <li><a href="#">Alterar tema</a></li>
+        <li><a href="#">Contato</a></li>
+        <hr>
       </ul>
     </div>
-    <div x-show="onsearch" @click.away="onsearch = false" class="search-input">
-      <input style="width: 75%; height: 50%; padding-left: 2px" type="search" placeholder="pesquisar palavra-chave...">
+    <div x-data="{value: ''}" x-show="onsearch" @click.away="onsearch = false" class="search-input">
+      <input x-model="value" @keyup.enter="articles = fetchNews({q: value, lang: selectedIdioma, country: selectedPais}); onsearch  = false; value = ''" style="width: 75%; height: 50%; padding-left: 2px" type="search" placeholder="pesquisar palavra-chave...">
     </div>
   </header>
   
-  <div x-data="{open: false}" style="padding: 15px; color: #e53935">
+  <div class="filter" x-data="{open: false}" style="padding: 15px;">
     <i x-on:click="open = !open" class="fa-solid fa-sliders"></i>
     <div x-show="open" class="filter-options">
-      <div id="idiomas">
-        <h5>idiomas</h5>
-        <div x-data="{idiomas: getIdiomas(), selectedValue: null}" id="options">
+      <div x-data="{hidden:false}" id="idiomas">
+        <h5 style="cursor:pointer" x-text="hidden? '+idiomas':'-idiomas'" @click="hidden = !hidden"></h5>
+        <div x-show="!hidden" x-data="{idiomas: getIdiomas()}" id="options">
           <template x-for="idioma in idiomas" :key="idioma.value">
-            <button :class="{'filter-selected': selectedValue == $el.value }" @click="selectedValue=selectedValue==$el.value?'':$el.value" :value="idioma.value" x-text="idioma.label"></button>
+            <button :class="{'filter-selected': selectedIdioma == $el.value }" @click="selectedIdioma=selectedIdioma==$el.value?'':$el.value" :value="idioma.value" x-text="idioma.label"></button>
           </template>
         </div>
       </div>
       <br>
-      <div id="países">
-        <h5>países</h5>
-        <div x-data="{paises: getPaises(), selectedValue: null}" id="options">
+      <div x-data="{hidden: false}" id="países">
+        <h5 style="cursor:pointer" x-text="hidden? '+países':'-países'" @click="hidden = !hidden"></h5>
+        <div x-show="!hidden" x-data="{paises: getPaises()}" id="options">
           <template x-for="pais in paises" :key="pais.value">
-            <button :class="{ 'filter-selected': selectedValue == $el.value }" @click="selectedValue=selectedValue==$el.value?'':$el.value" :value="pais.value" x-text="pais.label"></button>
+            <button :class="{ 'filter-selected': selectedPais == $el.value }" @click="selectedPais=selectedPais==$el.value?'':$el.value" :value="pais.value" x-text="pais.label"></button>
           </template>
         </div>
       </div>
       <br>
-      <div id="tópicos">
-        <h5>Tópicos</h5>
-        <div x-data="{topicos: getTopicos(), selectedValue:null}" id="options">
+      <div x-data="{hidden:false}" id="tópicos">
+        <h5 style="curosr:pointer" x-text="hidden? '+tópicos':'-tópicos'" @click="hidden = !hidden">Tópicos</h5>
+        <div x-show="!hidden" x-data="{topicos: getTopicos()}" id="options">
           <template x-for="topico in topicos" :key="topico.value">
-            <button :class="{'filter-selected': selectedValue == $el.value }" @click="selectedValue=selectedValue==$el.value?'':$el.value" :value="topico.value" x-text="topico.label"></button>
+            <button :class="{'filter-selected': selectedTopico == $el.value }" @click="selectedTopico=selectedTopico==$el.value?'':$el.value" :value="topico.value" x-text="topico.label"></button>
           </template>
         </div>
       </div>
     </div>
-    <!--h5 style="margin-top: 10px; cursor: pointer; text-decoration: underline;">adicionar filtros</h5-->
+    <div style="display:flex; column-gap: 10px; margin-top: 15px">
+      <p @click="articles = fetchNews({topic: selectedTopico, lang: selectedIdioma, country: selectedPais})">• aplicar filtros</p>
+      <p @click="selectedIdioma = null; selectedPais = null; selectedTopico = null">• limpar filtros</p>
+    </div>
   </div>
   
-  <main x-data="{list: [1,2,3]}">
-    <template x-for="i in list" :key="i">
+  <main x-data="{async init(){articles= await fetchNews({})}}" x-init="init()">
+    <template x-for="article in articles" :key="article.url">
     <div class="noticia">
       <header class="titulo">
-        <h2>Título</h2>
+        <h2 x-text="article.title"></h2>
       </header>
       <div>
-        <img src="https://placehold.co/400x200">
+        <img :src="article.image? article.image:'https://placehold.co/400x200'">
       </div>
       <footer class="data-de-publicacao">
         <p style="color: #757575">publicado em 16/05/2025</p>
@@ -78,5 +82,33 @@
     </template>
   </main>
   <script src="utils.js"></script>
+  
+  <!-- script pra busca das noticias -->
+  <script>
+    function buildUrl({base_url, q, topic, lang, country, from, to}) {
+      const API_KEY = ''
+      const BASE_URL = base_url || 'https://gnews.io/api/v4/top-headlines'
+      
+      // adiciona os parametros à url
+      const params = new URLSearchParams()
+      
+      if(q) params.append('q', q)
+      if(topic) params.append('topic', topic)
+      if(lang) params.append('lang', lang)
+      if(country) params.append('country', country)
+      if(from) params.append('from', from)
+      if(to) params.append('to', to)
+      params.append('apikey', API_KEY)
+      
+      return `${BASE_URL}?${params.toString()}`
+    }
+    
+    async function fetchNews(params) {
+      const url = buildUrl(params)
+      const response = await fetch(url)
+      const data = await response.json()
+      return data.articles || []
+    }
+  </script>
 </body>
 </html>
