@@ -70,7 +70,7 @@
     <template x-for="article in articles" :key="article.url">
     <div class="noticia">
       <header class="titulo">
-        <h2 x-text="article.title"></h2>
+        <h2 @click="loadArticle(article)" x-text="article.title"></h2>
       </header>
       <div>
         <img :src="article.image? article.image:'https://placehold.co/400x200'">
@@ -108,6 +108,13 @@
       const response = await fetch(url)
       const data = await response.json()
       return data.articles || []
+    }
+  </script>
+  <!-- script pra pagina do artigo -->
+  <script>
+    function loadArticle(article) {
+      sessionStorage.setItem('article', JSON.stringify(article))
+      window.location.href = '/article_page.html'
     }
   </script>
 </body>

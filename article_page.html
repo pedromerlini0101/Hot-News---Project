@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script src="https://kit.fontawesome.com/1073bdefd9.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <header x-data="{menuOpen: false, onsearch: false}">
+    <i @click="menuOpen=true" class="fas fa-bars"></i>
+    <h1>Hot News</h1>
+    <div></div>
+    
+    <div x-show="menuOpen" @click.away="menuOpen = false" class="menu">
+      <ul>
+        <li><a href="/index.html">Página inicial</a></li>
+        <li><a href="#">Salvos</a></li>
+        <li><a href="#">Alterar tema</a></li>
+        <li><a href="#">Contato</a></li>
+        <hr>
+      </ul>
+    </div>
+  </header>
+  
+  <main x-data="{article: JSON.parse(sessionStorage.getItem('article'))}">
+    <div style="background-color: transparent; box-shadow: none" class="noticia">
+      <h1 class="titulo" x-text="article?.title || 'Título'"></h1>
+      <img :src="article?.image || 'https://placehold.co/400x200'">
+      <p class="descricao" x-text="article?.description || 'descricao'" style="color: #757575"></p>
+      <br>
+      <p class="conteudo" x-text="article?.content || 'conteudo'"></p>
+    </div>
+  </main>
+</body>
+</html>

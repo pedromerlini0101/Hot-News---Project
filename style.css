@@ -35,6 +35,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-left: 10px;
 }
 
 .noticia {
@@ -47,8 +48,8 @@ main {
   width: 100%;
 }
 
-.noticia .titulo, .noticia .data-de-publicacao {
-  padding-left: 10px;
+.noticia .titulo, .noticia .data-de-publicacao, .noticia .descricao {
+  /*padding-left: 10px;*/
   color: var(--theme-color);
 }
 
