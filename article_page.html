@@ -8,6 +8,12 @@
   <link rel="stylesheet" href="style.css">
   <script src="//unpkg.com/alpinejs" defer></script>
   <script src="https://kit.fontawesome.com/1073bdefd9.js" crossorigin="anonymous"></script>
+  
+  <style>
+  [x-cloak] {
+    display: none !important;
+  }
+</style>
 </head>
 
 <body>
@@ -16,7 +22,7 @@
     <h1>Hot News</h1>
     <div></div>
     
-    <div x-show="menuOpen" @click.away="menuOpen = false" class="menu">
+    <div x-cloak x-show="menuOpen" @click.away="menuOpen = false" class="menu">
       <ul>
         <li><a href="/index.html">Página inicial</a></li>
         <li><a href="#">Salvos</a></li>
@@ -33,6 +39,9 @@
       <img :src="article?.image || 'https://placehold.co/400x200'">
       <p class="descricao" x-text="article?.description || 'descricao'" style="color: #757575"></p>
       <br>
+      <p>leia completo em: <a style="color: #e53935" :href="article?.url" x-text="article?.source.name"></a></p>
+      <br>
+      <hr>
       <p class="conteudo" x-text="article?.content || 'conteudo'"></p>
     </div>
   </main>

@@ -9,6 +9,12 @@
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="//unpkg.com/alpinejs" defer></script>
   <script src="https://kit.fontawesome.com/1073bdefd9.js" crossorigin="anonymous"></script>
+  
+  <style>
+  [x-cloak] {
+    display: none !important;
+  }
+</style>
 </head>
 
 <body x-data="{articles: [], selectedIdioma: null, selectedPais: null, selectedTopico: null}">
@@ -17,7 +23,7 @@
     <h1>Hot News</h1>
     <i @click="onsearch=true" class="fas fa-search"></i>
     
-    <div x-show="menuOpen" @click.away="menuOpen = false" class="menu">
+    <div x-cloak x-show="menuOpen" @click.away="menuOpen = false" class="menu">
       <ul>
         <li><a href="#">Salvos</a></li>
         <li><a href="#">Alterar tema</a></li>
@@ -25,17 +31,17 @@
         <hr>
       </ul>
     </div>
-    <div x-data="{value: ''}" x-show="onsearch" @click.away="onsearch = false" class="search-input">
+    <div x-cloak x-data="{value: ''}" x-show="onsearch" @click.away="onsearch = false" class="search-input">
       <input x-model="value" @keyup.enter="articles = fetchNews({q: value, lang: selectedIdioma, country: selectedPais}); onsearch  = false; value = ''" style="width: 75%; height: 50%; padding-left: 2px" type="search" placeholder="pesquisar palavra-chave...">
     </div>
   </header>
   
   <div class="filter" x-data="{open: false}" style="padding: 15px;">
     <i x-on:click="open = !open" class="fa-solid fa-sliders"></i>
-    <div x-show="open" class="filter-options">
+    <div x-cloak x-show="open" class="filter-options">
       <div x-data="{hidden:false}" id="idiomas">
         <h5 style="cursor:pointer" x-text="hidden? '+idiomas':'-idiomas'" @click="hidden = !hidden"></h5>
-        <div x-show="!hidden" x-data="{idiomas: getIdiomas()}" id="options">
+        <div x-cloak x-show="!hidden" x-data="{idiomas: getIdiomas()}" id="options">
           <template x-for="idioma in idiomas" :key="idioma.value">
             <button :class="{'filter-selected': selectedIdioma == $el.value }" @click="selectedIdioma=selectedIdioma==$el.value?'':$el.value" :value="idioma.value" x-text="idioma.label"></button>
           </template>
@@ -44,7 +50,7 @@
       <br>
       <div x-data="{hidden: false}" id="países">
         <h5 style="cursor:pointer" x-text="hidden? '+países':'-países'" @click="hidden = !hidden"></h5>
-        <div x-show="!hidden" x-data="{paises: getPaises()}" id="options">
+        <div x-cloak x-show="!hidden" x-data="{paises: getPaises()}" id="options">
           <template x-for="pais in paises" :key="pais.value">
             <button :class="{ 'filter-selected': selectedPais == $el.value }" @click="selectedPais=selectedPais==$el.value?'':$el.value" :value="pais.value" x-text="pais.label"></button>
           </template>
