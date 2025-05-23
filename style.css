@@ -55,6 +55,7 @@ main {
 
 .noticia img {
   width: 100%;
+  max-width: 720px;
   padding-inline: 12px;
   display: flex;
   align-self: center;
@@ -149,7 +150,7 @@ main {
   transition: color 0.2s ease;
 }
 
-.menu a:focus {
+.menu a:hover {
   color: var(--theme-color);
   transform: translate(2px, 2px);
 }
