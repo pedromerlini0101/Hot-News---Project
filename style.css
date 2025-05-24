@@ -168,3 +168,25 @@ main {
 .filter p:active {
   opacity: 0.5;
 }
+
+@media screen and (min-width: 1000px) {
+  .noticia {
+    width: 80%;
+    padding-inline: 50px;
+  }
+
+  .noticia img {
+    width: 100%;
+  }
+
+  p,
+  :is(h1, h2, h3, h4, h5, h6),
+  i
+  {
+    font-size: 2rem;
+  }
+
+  header h1 {
+    font-size: 4rem;
+  }
+}
